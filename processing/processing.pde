@@ -36,7 +36,7 @@ void setup() {
 }
 
 void draw() {
-  for (int z=0; z < 6; z++) {
+  for (int z = 0; z < 6; z++) {
     music(z);
   }
 }
@@ -45,15 +45,10 @@ void music(int i) {
   if (pad[i] == 0) {
     file[i].stop();
     file[i].cue(0);
-    println("stop");
   } else {
-    file[i].play();
-    println("play");
-    int x = 0;
     while (true) {
-      if (file[i].isPlaying()) {
-        x++;
-        println("File is still playing after " + x + " seconds");
+      if (!file[i].isPlaying()) {
+        file[i].play();
       } else {
         break;
       }
