@@ -12,12 +12,7 @@ SoundFile[] file;
 
 OscP5 oscP5;
 
-int pad1;
-int pad2;
-int pad3;
-int pad4;
-int pad5;
-int pad6;
+int[] pad = new int[6];
 
 // Define the number of samples 
 int numsounds = 6;
@@ -41,42 +36,24 @@ void setup() {
 }
 
 void draw() {
-  music();
+  for (int z=0; z < 6; z++) {
+    music(z);
+  }
 }
 
-void music() {
-  if (pad1 == 0) {
-    file[1].stop();
-    file[1].cue(0);
+void music(int i) {
+  if (pad[i] == 0) {
+    file[i].stop();
+    file[i].cue(0);
     println("stop");
   } else {
-    file[1].play();
+    file[i].play();
     println("play");
-    int i = 0;
+    int x = 0;
     while (true) {
-      delay(1000);
-      if (file[1].isPlaying()) {
-        i++;
-        println("File is still playing after " + i + " seconds");
-      } else {
-        break;
-      }
-    }
-    println("Soundfile finished playing!");
-    }
-  if (pad2 == 0) {
-    file[2].stop();
-    file[2].cue(0);
-    println("stop");
-  } else {
-    file[2].play();
-    println("play");
-    int i = 0;
-    while (true) {
-      delay(1000);
-      if (file[2].isPlaying()) {
-        i++;
-        println("File is still playing after " + i + " seconds");
+      if (file[i].isPlaying()) {
+        x++;
+        println("File is still playing after " + x + " seconds");
       } else {
         break;
       }
@@ -89,16 +66,16 @@ void music() {
 void oscEvent(OscMessage theOscMessage) {
   /* print the address pattern and the content of the received OscMessage */
   println("addrpattern: "+theOscMessage.addrPattern());
-  pad1 = theOscMessage.get(0).intValue();
-  println(" - Pad1: "+pad1);
-  pad2 = theOscMessage.get(1).intValue();
-  println(" - Pad2: "+pad2);
-  pad3 = theOscMessage.get(2).intValue();
-  println(" - Pad3: "+pad3);
-  pad4 = theOscMessage.get(3).intValue();
-  println(" - Pad4: "+pad4);
-  pad5 = theOscMessage.get(4).intValue();
-  println(" - Pad5: "+pad5);
-  pad6 = theOscMessage.get(5).intValue();
-  println(" - Pad6: "+pad6);
+  pad[1] = theOscMessage.get(0).intValue();
+  println(" - Pad1: "+pad[1]);
+  pad[2] = theOscMessage.get(1).intValue();
+  println(" - Pad2: "+pad[2]);
+  pad[3] = theOscMessage.get(2).intValue();
+  println(" - Pad3: "+pad[3]);
+  pad[4] = theOscMessage.get(3).intValue();
+  println(" - Pad4: "+pad[4]);
+  pad[5] = theOscMessage.get(4).intValue();
+  println(" - Pad5: "+pad[5]);
+  pad[6] = theOscMessage.get(5).intValue();
+  println(" - Pad6: "+pad[6]);
 }
