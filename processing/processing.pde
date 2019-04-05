@@ -61,16 +61,16 @@ void music(int i) {
 void oscEvent(OscMessage theOscMessage) {
   /* print the address pattern and the content of the received OscMessage */
   println("addrpattern: "+theOscMessage.addrPattern());
-  pad[1] = theOscMessage.get(0).intValue();
-  println(" - Pad1: "+pad[1]);
-  pad[2] = theOscMessage.get(1).intValue();
-  println(" - Pad2: "+pad[2]);
-  pad[3] = theOscMessage.get(2).intValue();
-  println(" - Pad3: "+pad[3]);
-  pad[4] = theOscMessage.get(3).intValue();
-  println(" - Pad4: "+pad[4]);
-  pad[5] = theOscMessage.get(4).intValue();
-  println(" - Pad5: "+pad[5]);
-  pad[6] = theOscMessage.get(5).intValue();
-  println(" - Pad6: "+pad[6]);
+  pad[0] = theOscMessage.get(0).intValue();
+  println(" - Pad1: "+pad[0]);
+  pad[1] = theOscMessage.get(1).intValue();
+  println(" - Pad2: "+pad[1]);
+  pad[2] = theOscMessage.get(2).intValue();
+  println(" - Pad3: "+pad[2]);
+  pad[3] = theOscMessage.get(3).intValue();
+  println(" - Pad4: "+pad[3]);
+  pad[4] = theOscMessage.get(4).intValue();
+  println(" - Pad5: "+pad[4]);
+  pad[5] = theOscMessage.get(5).intValue();
+  println(" - Pad6: "+pad[5]);
 }
