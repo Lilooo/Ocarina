@@ -27,7 +27,7 @@ int val2 = 9;
 int val3 = 7;
 int val4 = 5;
 int val5 = 3;
-int val6 = 3;
+int val6 = 4;
 
 // You can have up to 4 on one i2c bus but one is enough for testing!
 Adafruit_MPR121 cap = Adafruit_MPR121();
