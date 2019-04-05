@@ -22,12 +22,7 @@ WiFiUDP Udp;                          // A UDP instance to let us send and recei
 #define _BV(bit) (1 << (bit)) 
 #endif
 
-int val1 = 2;
-int val2 = 9;
-int val3 = 7;
-int val4 = 5;
-int val5 = 3;
-int val6 = 4;
+int val[6];
 
 // You can have up to 4 on one i2c bus but one is enough for testing!
 Adafruit_MPR121 cap = Adafruit_MPR121();
@@ -77,7 +72,7 @@ void loop() {
     // Get the currently touched pads
     currtouched = cap.touched();
 
-    for (uint8_t i = 0; i < 12; i++) {
+    for (uint8_t i = 0; i < 6; i++) {
       // it if *is* touched and *wasnt* touched before, alert!
       if ((currtouched & _BV(i)) && !(lasttouched & _BV(i)) ) {
         Serial.print(i); Serial.println(" touched");
@@ -90,45 +85,22 @@ void loop() {
 
     // reset our state
     lasttouched = currtouched;
-
-    if (cap.touched() & (1 << 1)) {
-      val1 = 1;
-    } else {
-      val1 = 0;
+    
+    for (int x=0; x < 6; x++) {
+      if (cap.touched() & (1 << x)) {
+        val[x] = 1;
+      } else {
+        val[x] = 0;
+      }
     }
-    if (cap.touched() & (1 << 2)) {
-      val2 = 1;
-    } else {
-      val2 = 0;
-    }
-    if (cap.touched() & (1 << 3)) {
-      val3 = 1;
-    } else {
-      val3 = 0;
-    }
-    if (cap.touched() & (1 << 4)) {
-      val4 = 1;
-    } else {
-      val4 = 0;
-    }
-    if (cap.touched() & (1 << 5)) {
-      val5 = 1;
-    } else {
-      val5 = 0;
-    }
-     if (cap.touched() & (1 << 6)) {
-      val6 = 1;
-    } else {
-      val6 = 0;
-    }
-
+    
     OSCMessage msg("/touch");
-    msg.add(val1);
-    msg.add(val2);
-    msg.add(val3);
-    msg.add(val4);
-    msg.add(val5);
-    msg.add(val6);
+    msg.add(val[0]);
+    msg.add(val[1]);
+    msg.add(val[2]);
+    msg.add(val[3]);
+    msg.add(val[4]);
+    msg.add(val[5]);
     Udp.beginPacket(outIp, outPort);
     msg.send(Udp);
     Udp.endPacket();
