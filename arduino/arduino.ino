@@ -1,22 +1,25 @@
 //  From the Open Sound Control (OSC) library for the ESP8266/ESP32
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
+#include <DNSServer.h>
+#include <ESP8266WebServer.h>
+#include <WiFiManager.h>
+#include <mDNSResolver.h>
 #include <OSCMessage.h>
 // Capactive Sensors
 #include <Wire.h>
 #include "Adafruit_MPR121.h"
 
+#define NAME_TO_RESOLVE "e4310.local"
+const IPAddress ip;
 ////////////////////////////////////////////////////////////////////////////////
-char ssid[] = "Tardis";                // TODO: your network SSID (name)
-char pass[] = "SuperLapin";             // TODO: your network password
-const IPAddress outIp(192,168,43,33); // TODO: remote IP of your computer
-////////////////////////////////////////////////////////////////////////////////
-
+using namespace mDNSResolver;
 
 const unsigned int localPort = 8888;  // local port to listen for OSC packets (not used for sending)
 const unsigned int outPort = 4559;    // remote port to receive OSC
 WiFiUDP Udp;                          // A UDP instance to let us send and receive packets over UDP
 
+Resolver resolver(Udp);
 
 #ifndef _BV
 #define _BV(bit) (1 << (bit)) 
@@ -35,15 +38,10 @@ uint16_t currtouched = 0;
 void setup() {
     Serial.begin(115200);
 
-    // Connect to WiFi network
-    Serial.print("\nConnecting to ");
-    Serial.println(ssid);
-    WiFi.begin(ssid, pass);
-
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-    }
+    WiFiManager wifiManager;
+    wifiManager.autoConnect("Ocarina");
+    Serial.println("connected...yeey :)");
+    
     Serial.println("\nWiFi connected - IP address: ");
     Serial.println(WiFi.localIP());
 
@@ -65,9 +63,19 @@ void setup() {
       while (1);
     }
     Serial.println("MPR121 found!");
+    
+    IPAddress ip = resolver.search(NAME_TO_RESOLVE);
+    if(ip != INADDR_NONE) {
+      Serial.print("Resolved: ");
+      Serial.println(ip);
+    } else {
+      Serial.println("Not resolved");
+      while (1);
+    }
 }
 
 void loop() {
+
   
     // Get the currently touched pads
     currtouched = cap.touched();
@@ -101,7 +109,7 @@ void loop() {
     msg.add(val[3]);
     msg.add(val[4]);
     msg.add(val[5]);
-    Udp.beginPacket(outIp, outPort);
+    Udp.beginPacket(ip, outPort);
     msg.send(Udp);
     Udp.endPacket();
     msg.empty();
